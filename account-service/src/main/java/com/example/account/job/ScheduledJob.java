@@ -15,8 +15,8 @@ import java.util.Date;
  */
 @Component
 @Slf4j
-public class ScheduledJob  implements CommandLineRunner {
-    private final int MAX_RECORDS = 100;
+public class ScheduledJob implements CommandLineRunner {
+    private static final int MAXRECORDS = 100;
     private AccountRepository accountRepository;
 
     public ScheduledJob(AccountRepository accountRepository) {
@@ -34,9 +34,10 @@ public class ScheduledJob  implements CommandLineRunner {
             stopWatch.start();
 
             log.info("Dummy records getting inserted..");
-            for (int i = 0; i < MAX_RECORDS; i++) {
+            for (int i = 0; i < MAXRECORDS; i++) {
                 Faker faker = new Faker();
-                Account account = new Account(faker.number().numberBetween(100, 200),
+                Account account = new Account(faker.number().numberBetween(999999L, 9999999L),
+                        faker.number().numberBetween(100, 200),
                         faker.number().numberBetween(9999L, 99999L));
                 accountRepository.save(account);
                 if (i % 10 == 0) {

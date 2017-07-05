@@ -85,5 +85,10 @@ cloudfoundry {
             plan = "lemur"
             bind = true
         }
+        "circuit-breaker-dashboard" {
+            label = "circuit-breaker-dashboard"
+            plan = "standard"
+            bind = true
+        }
     }
 }

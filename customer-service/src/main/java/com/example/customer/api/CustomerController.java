@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-@RestController(value = "/api")
+@RestController
 public class CustomerController {
 
     private CustomerService customerService;
@@ -15,8 +15,10 @@ public class CustomerController {
         this.customerService = customerService;
     }
 
+
     @GetMapping(value = "/customer")
     public CustomerResponse getByCustomerNumber(@RequestParam("customerNumber") int customerNumber){
         return this.customerService.findCustomerDetailsByNumber(customerNumber);
     }
+
 }

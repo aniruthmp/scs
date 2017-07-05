@@ -6,7 +6,7 @@ import com.example.customer.model.Account;
 import com.example.customer.model.Contact;
 import com.example.customer.model.CustomerResponse;
 import com.example.customer.repository.CustomerRepository;
-import com.google.common.collect.Iterables;
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -27,6 +27,7 @@ public class CustomerService {
         this.accountClient = accountClient;
     }
 
+    @HystrixCommand(fallbackMethod = "getDummyCustomer")
     public CustomerResponse findCustomerDetailsByNumber(int customerNumber) {
         log.info("Came inside findCustomerDetailsById for customerId: " + customerNumber);
         StopWatch stopWatch = new StopWatch();
@@ -39,7 +40,7 @@ public class CustomerService {
             Customer customer = this.customerRepository.findByCustomerNumber(customerNumber);
 
             if (Objects.isNull(customer))
-                return customerResponse;
+                return null;
 
             customerResponse = new CustomerResponse(customer.getFirstName(), customer.getLastName(), customerNumber);
             customerResponse.setContact(new Contact(customer.getCellPhone(), customer.getLandLine(),
@@ -58,9 +59,17 @@ public class CustomerService {
 
         } catch (Exception ex) {
             log.error(ex.getMessage());
-            ex.printStackTrace(); //TODO Remove
         }
 
         return customerResponse;
+    }
+
+    /**
+     * Fallback method for @method findCustomerDetailsByNumber
+     * @param customerNumber customerNumber
+     * @return Dummy customer response
+     */
+    CustomerResponse getDummyCustomer(int customerNumber){
+        return new CustomerResponse("Dummy", "Customer", customerNumber);
     }
 }
