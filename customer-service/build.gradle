@@ -63,7 +63,7 @@ cloudfoundry {
     application = 'ani-customer-service'
     memory = 1024
     instances = 1
-    env = [ "key": "value" ]
+    env = [ "SPRING_PROFILES_ACTIVE": "cloud" ]
     services {
         "mysql" {
             label = "mysql"
