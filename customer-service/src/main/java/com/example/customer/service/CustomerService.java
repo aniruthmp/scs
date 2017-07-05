@@ -35,42 +35,38 @@ public class CustomerService {
 
         CustomerResponse customerResponse = null;
 
-        try {
-            log.info("Querying the database...");
-            Customer customer = this.customerRepository.findByCustomerNumber(customerNumber);
+        log.info("Querying the database...");
+        Customer customer = this.customerRepository.findByCustomerNumber(customerNumber);
 
-            if (Objects.isNull(customer))
-                return null;
+        if (Objects.isNull(customer))
+            return null;
 
-            customerResponse = new CustomerResponse(customer.getFirstName(), customer.getLastName(), customerNumber);
-            customerResponse.setContact(new Contact(customer.getCellPhone(), customer.getLandLine(),
-                    customer.getStreetAddress(), customer.getCity(), customer.getState(), customer.getZip()));
+        customerResponse = new CustomerResponse(customer.getFirstName(), customer.getLastName(), customerNumber);
+        customerResponse.setContact(new Contact(customer.getCellPhone(), customer.getLandLine(),
+                customer.getStreetAddress(), customer.getCity(), customer.getState(), customer.getZip()));
 
-            log.info("Invoking account-service feign call...");
+        log.info("Invoking account-service feign call...");
 //            Collection<Account> accounts = this.accountClient.getAccounts(customerNumber).getContent();
-            Collection<Account> accounts = this.accountClient.getAccounts(customerNumber);
-            log.info("Got the response from account-service feign call");
+        Collection<Account> accounts = this.accountClient.getAccounts(customerNumber);
+        log.info("Got the response from account-service feign call");
 
-            if (!CollectionUtils.isEmpty(accounts))
-                customerResponse.setAccounts(accounts);
+        if (!CollectionUtils.isEmpty(accounts))
+            customerResponse.setAccounts(accounts);
 
-            stopWatch.stop();
-            log.info("findCustomerDetailsById for customerId: " + customerNumber +
-                    " took " + stopWatch.getTotalTimeMillis() + " milliseconds");
-
-        } catch (Exception ex) {
-            log.error(ex.getMessage());
-        }
+        stopWatch.stop();
+        log.info("findCustomerDetailsById for customerId: " + customerNumber +
+                " took " + stopWatch.getTotalTimeMillis() + " milliseconds");
 
         return customerResponse;
     }
 
     /**
      * Fallback method for @method findCustomerDetailsByNumber
+     *
      * @param customerNumber customerNumber
      * @return Dummy customer response
      */
-    CustomerResponse getDummyCustomer(int customerNumber){
+    CustomerResponse getDummyCustomer(int customerNumber) {
         return new CustomerResponse("Dummy", "Customer", customerNumber);
     }
 }
