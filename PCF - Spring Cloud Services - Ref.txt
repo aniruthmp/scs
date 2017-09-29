@@ -4,3 +4,7 @@ cf create-service p-circuit-breaker-dashboard standard circuit-breaker-dashboard
 
 docker run --name mongodb -p 27017:27017 -d mongo
 docker run --name mysqldb -e MYSQL_ROOT_PASSWORD=password -e MYSQL_ROOT_HOST="172.17.0.1" -e MYSQL_DATABASE=root -p 3306:3306 -d mysql/mysql-server
+
+cf delete-service config-server
+cf delete-service service-registry
+

@@ -20,7 +20,7 @@ apply plugin: 'org.springframework.boot'
 apply plugin: 'cloudfoundry'
 
 version = '0.0.1-SNAPSHOT'
-sourceCompatibility = 9
+sourceCompatibility = 1.8
 
 repositories {
     mavenCentral()
@@ -44,6 +44,7 @@ dependencies {
     compile group: 'org.springframework.data', name: 'spring-data-rest-hal-browser'
     compileOnly group: 'org.projectlombok', name: 'lombok'
     testCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test'
+    testCompile 'com.h2database:h2'
 }
 
 dependencyManagement {
@@ -57,7 +58,7 @@ cloudfoundry {
     target = "https://api.run.pivotal.io"
     space = "development"
     file = new File('build/libs/account-service-0.0.1-SNAPSHOT.jar')
-    application = 'ani-account-service'
+    application = 'ap-account-service'
     memory = 1024
     instances = 1
     env = [ "SPRING_PROFILES_ACTIVE": "cloud" ]
