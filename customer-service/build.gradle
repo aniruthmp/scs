@@ -3,7 +3,7 @@ version '1.0-SNAPSHOT'
 
 buildscript {
     ext {
-        springBootVersion = '1.5.4.RELEASE'
+        springBootVersion = '1.5.7.RELEASE'
     }
     repositories {
         mavenCentral()
@@ -20,7 +20,7 @@ apply plugin: 'org.springframework.boot'
 apply plugin: 'cloudfoundry'
 
 version = '0.0.1-SNAPSHOT'
-sourceCompatibility = 1.8
+sourceCompatibility = 9
 
 repositories {
     mavenCentral()
