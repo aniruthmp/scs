@@ -114,6 +114,7 @@ hs_err_pid*
 *.jar
 *.war
 *.ear
+scs.local
 
 # Ignore Directories
 log/

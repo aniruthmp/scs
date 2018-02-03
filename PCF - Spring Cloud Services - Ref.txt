@@ -10,15 +10,3 @@ cf delete-service config-server
 cf delete-service service-registry
 
 docker system prune -a
-
-https://ap-customer-service.cfapps.pez.pivotal.io/customer/search/findByCustomerNumber?customerNumber=189
-
-
-aparthasarathy+pipeline@pivotal.io
-Pivotal123
-
-https://opsmgr.haas-76.pez.pivotal.io/
-admin / 2Si7VbBAMyn0!
-
-https://apps.run.haas-76.pez.pivotal.io/
-SSH on Ops Manager is admin / qwkro16PalFFaqss1CLGbxxj-N3XtQoM
