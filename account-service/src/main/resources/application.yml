@@ -12,6 +12,14 @@ spring:
     level:
       org.springframework: WARN
       org.hibernate: WARN
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    database-platform: org.hibernate.dialect.MySQLDialect
+    show-sql: false
+  datasource:
+    driverClassName: com.mysql.jdbc.Driver
+
 eureka:
   client:
     register-with-eureka: false

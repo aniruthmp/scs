@@ -2,13 +2,16 @@ package com.example.account.domain;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.Id;
+import javax.persistence.*;
 
 @Data
 @NoArgsConstructor
+@Entity
+@Table(name = "account")
 public class Account {
     @Id
-    private String accountId;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private long accountId;
 
     private long accountNumber;
     private int customerNumber;
