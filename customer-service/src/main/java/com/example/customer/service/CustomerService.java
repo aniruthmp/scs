@@ -46,7 +46,6 @@ public class CustomerService {
                 customer.getStreetAddress(), customer.getCity(), customer.getState(), customer.getZip()));
 
         log.info("Invoking account-service feign call...");
-//            Collection<Account> accounts = this.accountClient.getAccounts(customerNumber).getContent();
         Collection<Account> accounts = this.accountClient.getAccounts(customerNumber);
         log.info("Got the response from account-service feign call");
 
