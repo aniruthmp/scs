@@ -1,11 +1,12 @@
 ---
 applications:
-- name: ani-account-service
-  memory: 512M
-  path: ../../../build/libs/account-service-0.0.1-SNAPSHOT.jar
-  host: ani-account-service
+- name: ap-account-service
+  memory: 1024M
+  path: build/libs/account-service-0.0.1-SNAPSHOT.jar
+  domain: cfapps.pez.pivotal.io
+  timeout: 60
   services:
-  - mongodb
+  - mysql
   - config-server
   - service-registry
   - p-rabbitmq

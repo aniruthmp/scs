@@ -1,4 +1,5 @@
 *.class
+.DS_Store
 
 ### IDEA ###
 *.idea/
@@ -78,6 +79,7 @@ local.properties
 
 ### Maven ###
 target/
+out/
 pom.xml.tag
 pom.xml.releaseBackup
 pom.xml.versionsBackup
@@ -113,6 +115,7 @@ hs_err_pid*
 *.jar
 *.war
 *.ear
+scs.local
 
 # Ignore Directories
 log/

@@ -11,13 +11,16 @@ buildscript {
     dependencies {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
         classpath group: 'org.cloudfoundry', name: 'cf-gradle-plugin', version: '1.1.3'
+        classpath group: 'org.springframework.cloud', name: 'spring-cloud-contract-gradle-plugin', version: '1.1.4.RELEASE'
     }
 }
 
 apply plugin: 'java'
 apply plugin: 'idea'
 apply plugin: 'org.springframework.boot'
+apply plugin: 'spring-cloud-contract'
 apply plugin: 'cloudfoundry'
+apply plugin: 'jacoco'
 
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = 1.8
@@ -36,15 +39,17 @@ dependencies {
     compile group: 'io.pivotal.spring.cloud', name: 'spring-cloud-services-starter-circuit-breaker'
     compile group: 'io.pivotal.spring.cloud', name: 'spring-cloud-services-starter-config-client'
     compile group: 'io.pivotal.spring.cloud', name: 'spring-cloud-services-starter-service-registry'
+    compile group: 'mysql', name: 'mysql-connector-java'
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-actuator'
-    compile group: 'org.springframework.boot', name: 'spring-boot-starter-data-mongodb'
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa'
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-data-rest'
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-hateoas'
     compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-sleuth'
     compile group: 'org.springframework.data', name: 'spring-data-rest-hal-browser'
     compileOnly group: 'org.projectlombok', name: 'lombok'
-    testCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test'
     testCompile 'com.h2database:h2'
+    testCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test'
+    testCompile 'org.springframework.cloud:spring-cloud-starter-contract-verifier'
 }
 
 dependencyManagement {
@@ -54,18 +59,29 @@ dependencyManagement {
     }
 }
 
+jacocoTestReport {
+    reports {
+        xml.enabled true
+        html.enabled true
+        csv.enabled false
+    }
+}
+
+test.finalizedBy jacocoTestReport
+
 cloudfoundry {
-    target = "https://api.run.pivotal.io"
+    target = "https://api.run.pez.pivotal.io"
+//    target = "https://api.run.pivotal.io"
     space = "development"
     file = new File('build/libs/account-service-0.0.1-SNAPSHOT.jar')
     application = 'ap-account-service'
     memory = 1024
     instances = 1
-    env = [ "SPRING_PROFILES_ACTIVE": "cloud" ]
+    env = ["SPRING_PROFILES_ACTIVE": "cloud"]
     services {
-        "mongodb" {
-            label = "mongodb"
-            plan = "sandbox"
+        "mysql" {
+            label = "mysql"
+            plan = "spark"
             bind = true
         }
         "config-server" {
