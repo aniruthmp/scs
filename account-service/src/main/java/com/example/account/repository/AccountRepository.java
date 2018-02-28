@@ -7,8 +7,8 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
 import java.util.List;
 
-@RepositoryRestResource(collectionResourceRel = "account", path = "account")
-public interface AccountRepository extends JpaRepository<Account, String> {
+@RepositoryRestResource(collectionResourceRel = "accounts", path = "accounts")
+public interface AccountRepository extends JpaRepository<Account, Long> {
 
     List<Account> findByCustomerNumber(@Param("customerNumber") int customerNumber);
 }

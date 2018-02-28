@@ -2,14 +2,14 @@
 applications:
 - name: ap-customer-service
   memory: 1024M
-  path: build/libs/customer-service-0.0.1-SNAPSHOT.jar
-  domain: cfapps.pez.pivotal.io
+  path: ../../../build/libs/customer-service-0.0.1-SNAPSHOT.jar
   timeout: 60
   services:
   - mysql
-  - config-server
-  - service-registry
+  - p-config-server
+  - p-service-registry
   - p-rabbitmq
-  - circuit-breaker-dashboard
+  - p-circuit-breaker-dashboard
+  - p-new-relic
   env:
     SPRING_PROFILES_ACTIVE: cloud
