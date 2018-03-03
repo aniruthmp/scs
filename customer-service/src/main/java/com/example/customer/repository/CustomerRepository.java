@@ -7,7 +7,7 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
 import java.util.List;
 
-@RepositoryRestResource(collectionResourceRel = "customer", path = "customer")
+@RepositoryRestResource(collectionResourceRel = "customers", path = "customers")
 public interface CustomerRepository extends JpaRepository<Customer, Long> {
 
     List<Customer> findByLastName(@Param("name") String name);

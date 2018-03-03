@@ -8,6 +8,9 @@ import com.example.customer.model.CustomerResponse;
 import com.example.customer.repository.CustomerRepository;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.hateoas.PagedResources;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StopWatch;
@@ -67,5 +70,14 @@ public class CustomerService {
      */
     CustomerResponse getDummyCustomer(int customerNumber) {
         return new CustomerResponse("Dummy", "Customer", customerNumber);
+    }
+
+    public PagedResources<Account> getPagedAccounts(Pageable pageable) {
+
+        log.info("pageable values: " + pageable.toString());
+        PagedResources<Account> pagedAccounts = accountClient.getPagedAccounts(pageable.getPageNumber(), pageable.getPageSize(), pageable.getSort());
+        log.info("From FeignClient: " + pagedAccounts.toString());
+        log.info("List: " + pagedAccounts.getContent().toString());
+        return pagedAccounts;
     }
 }

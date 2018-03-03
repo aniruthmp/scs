@@ -3,41 +3,27 @@ security:
     enabled: false
 
 spring:
-  logging:
-    pattern:
-      console: "%clr(%d{yyyy-MM-dd HH:mm:ss}){faint} %clr(${LOG_LEVEL_PATTERN:-%5p}) %clr([${springAppName:-},%X{X-B3-TraceId:-},%X{X-B3-SpanId:-},%X{X-Span-Export:-}]){yellow} %clr(${PID:- }){magenta} %clr(---){faint} %clr([%15.15t]){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint} %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}"
-    level:
-      org.springframework: WARN
-      org.hibernate: WARN
-  jpa:
-    hibernate:
-      ddl-auto: create-drop
-    database-platform: org.hibernate.dialect.MySQLDialect
-    show-sql: false
   datasource:
-    driverClassName: com.mysql.jdbc.Driver
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:db;DB_CLOSE_DELAY=-1
+    username: sa
+    password: sa
 
 eureka:
   client:
-    serviceUrl:
-      defaultZone: ${DISCOVERY_URL:http://discovery:8761}/eureka/
-  instance:
-    leaseRenewalIntervalInSeconds: 1
-    leaseExpirationDurationInSeconds: 2
+    register-with-eureka: false
+    fetch-registry: false
+    enabled: false
 
-ribbon:
-  eureka:
-    enabled: true
+hystrix:
+  metrics:
+    enabled: false
+server:
+  port: 7001
 
----
+management:
+  security.enabled: false
+  trace.include: parameters,errors
 
-spring:
-  profiles: local
-  jpa:
-    hibernate:
-      ddl-auto: create-drop
-  datasource:
-    driverClassName: com.mysql.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/root
-    username: root
-    password: password
+ribbon.eureka.enabled: false
+account-service.ribbon.listOfServers: localhost:7000

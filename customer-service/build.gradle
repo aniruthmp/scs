@@ -10,7 +10,7 @@ buildscript {
     }
     dependencies {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
-        classpath group: 'org.springframework.cloud', name: 'spring-cloud-contract-gradle-plugin', version: '1.1.4.RELEASE'
+        classpath group: 'org.springframework.cloud', name: 'spring-cloud-contract-gradle-plugin', version: '1.2.3.RELEASE'
     }
 }
 
@@ -28,33 +28,29 @@ repositories {
 }
 
 ext {
-    springCloudServicesVersion = '1.5.0.RELEASE'
     springCloudVersion = 'Edgware.SR2'
 }
 
 dependencies {
     compile group: 'com.github.javafaker', name: 'javafaker', version: '0.13'
-    compile group: 'io.pivotal.spring.cloud', name: 'spring-cloud-services-starter-circuit-breaker'
-    compile group: 'io.pivotal.spring.cloud', name: 'spring-cloud-services-starter-config-client'
-    compile group: 'io.pivotal.spring.cloud', name: 'spring-cloud-services-starter-service-registry'
-    compile group: 'mysql', name: 'mysql-connector-java'
     compile 'org.projectlombok:lombok:1.16.18'
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-actuator'
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa'
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-data-rest'
+    compile 'org.springframework.data:spring-data-commons:1.13.10.RELEASE'
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-hateoas'
     compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-feign'
+    compile group: 'org.springframework.cloud', name: 'spring-cloud-netflix-core'
     compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-hystrix'
     compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-sleuth'
     compile group: 'org.springframework.data', name: 'spring-data-rest-hal-browser'
-    testCompile 'com.h2database:h2'
+    compile 'com.h2database:h2'
     testCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test'
     testCompile 'org.springframework.cloud:spring-cloud-starter-contract-verifier'
 }
 
 dependencyManagement {
     imports {
-        mavenBom "io.pivotal.spring.cloud:spring-cloud-services-dependencies:${springCloudServicesVersion}"
         mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
     }
 }

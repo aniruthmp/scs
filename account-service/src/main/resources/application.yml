@@ -2,29 +2,26 @@ security:
   basic:
     enabled: false
 
----
-
 spring:
-  profiles: local
-  logging:
-    pattern:
-      console: "%clr(%d{yyyy-MM-dd HH:mm:ss}){faint} %clr(${LOG_LEVEL_PATTERN:-%5p}) %clr([${springAppName:-},%X{X-B3-TraceId:-},%X{X-B3-SpanId:-},%X{X-Span-Export:-}]){yellow} %clr(${PID:- }){magenta} %clr(---){faint} %clr([%15.15t]){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint} %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}"
-    level:
-      org.springframework: WARN
-      org.hibernate: WARN
-  jpa:
-    hibernate:
-      ddl-auto: create-drop
-    database-platform: org.hibernate.dialect.MySQLDialect
-    show-sql: false
+  jackson.date-format: yyyy-MM-dd HH:mm:ss
   datasource:
-    driverClassName: com.mysql.jdbc.Driver
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:db;DB_CLOSE_DELAY=-1
+    username: sa
+    password: sa
 
 eureka:
   client:
     register-with-eureka: false
     fetch-registry: false
+    enabled: false
+
 hystrix:
   metrics:
     enabled: false
+server:
+  port: 7000
 
+management:
+  security.enabled: false
+  trace.include: parameters,errors

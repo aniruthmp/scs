@@ -40,7 +40,7 @@ public class ScheduledJob implements CommandLineRunner {
                 int customerNumber = faker.number().numberBetween(100, 200);
 
                 if (Objects.nonNull(customerRepository.findByCustomerNumber(customerNumber))) {
-                    log.warn("customerNumber: " + customerNumber + " is alread present");
+//                    log.warn("customerNumber: " + customerNumber + " is already present");
                     continue;
                 }
 
@@ -50,8 +50,8 @@ public class ScheduledJob implements CommandLineRunner {
                         faker.address().streetAddress(), faker.address().city(),
                         faker.address().state(), faker.address().zipCode());
                 customerRepository.save(customer);
-                if (i % 10 == 0)
-                    log.info("Inserted records count: " + i);
+//                if (i % 10 == 0)
+//                    log.info("Inserted records count: " + i);
             }
             log.info(stopWatch.prettyPrint());
         } catch (Exception ex) {
