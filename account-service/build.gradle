@@ -1,16 +1,14 @@
-group 'com.example'
-version '1.0-SNAPSHOT'
-
 buildscript {
     ext {
-        springBootVersion = '1.5.10.RELEASE'
+        springBootVersion = '2.0.0.RELEASE'
     }
     repositories {
         mavenCentral()
+        maven { url "https://repo.spring.io/milestone" }
     }
     dependencies {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
-        classpath group: 'org.springframework.cloud', name: 'spring-cloud-contract-gradle-plugin', version: '1.1.4.RELEASE'
+        classpath("org.springframework.cloud:spring-cloud-contract-gradle-plugin:2.0.0.M6")
     }
 }
 
@@ -19,29 +17,34 @@ apply plugin: 'idea'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'spring-cloud-contract'
 apply plugin: 'jacoco'
+apply plugin: 'io.spring.dependency-management'
 
+group 'com.example'
+version '1.0-SNAPSHOT'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = 1.8
 
 repositories {
     mavenCentral()
+    maven { url "https://repo.spring.io/milestone" }
 }
 
 ext {
-    springCloudVersion = 'Edgware.SR2'
+    springCloudVersion = 'Finchley.M8'
 }
 
 dependencies {
-    compile group: 'com.github.javafaker', name: 'javafaker', version: '0.13'
-    compile group: 'org.springframework.boot', name: 'spring-boot-starter-actuator'
-    compile group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa'
-    compile group: 'org.springframework.boot', name: 'spring-boot-starter-data-rest'
-    compile group: 'org.springframework.boot', name: 'spring-boot-starter-hateoas'
-    compile group: 'org.springframework.data', name: 'spring-data-rest-hal-browser'
-    compileOnly group: 'org.projectlombok', name: 'lombok'
     compile 'com.h2database:h2'
-    testCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test'
-    testCompile 'org.springframework.cloud:spring-cloud-starter-contract-verifier'
+    compile('org.springframework.boot:spring-boot-starter-actuator')
+    compile('org.springframework.boot:spring-boot-starter-data-jpa')
+    compile('org.springframework.boot:spring-boot-starter-data-rest')
+    compile('org.springframework.boot:spring-boot-starter-hateoas')
+    compile('org.springframework.cloud:spring-cloud-starter-sleuth')
+    compile('org.springframework.data:spring-data-rest-hal-browser')
+    compile group: 'com.github.javafaker', name: 'javafaker', version: '0.13'
+    compileOnly('org.projectlombok:lombok')
+    testCompile('org.springframework.boot:spring-boot-starter-test')
+    testCompile('org.springframework.cloud:spring-cloud-starter-contract-verifier')
 }
 
 dependencyManagement {

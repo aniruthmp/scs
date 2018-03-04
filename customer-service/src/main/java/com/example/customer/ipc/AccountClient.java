@@ -1,7 +1,7 @@
 package com.example.customer.ipc;
 
 import com.example.customer.model.Account;
-import org.springframework.cloud.netflix.feign.FeignClient;
+import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.data.domain.Sort;
 import org.springframework.hateoas.PagedResources;
 import org.springframework.hateoas.Resources;

@@ -1,7 +1,3 @@
-security:
-  basic:
-    enabled: false
-
 spring:
   jackson.date-format: yyyy-MM-dd HH:mm:ss
   datasource:
@@ -10,18 +6,12 @@ spring:
     username: sa
     password: sa
 
-eureka:
-  client:
-    register-with-eureka: false
-    fetch-registry: false
-    enabled: false
-
-hystrix:
-  metrics:
-    enabled: false
 server:
   port: 7000
 
 management:
-  security.enabled: false
-  trace.include: parameters,errors
+  endpoints:
+    enabled-by-default: true
+  endpoint:
+    httptrace:
+      enabled: true
