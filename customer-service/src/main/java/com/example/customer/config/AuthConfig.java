@@ -20,7 +20,6 @@ import org.springframework.security.oauth2.provider.authentication.OAuth2Authent
 import org.springframework.security.oauth2.provider.authentication.TokenExtractor;
 import org.springframework.security.oauth2.provider.expression.OAuth2MethodSecurityExpressionHandler;
 import org.springframework.security.web.authentication.preauth.AbstractPreAuthenticatedProcessingFilter;
-import org.springframework.web.client.RestTemplate;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
@@ -35,11 +34,6 @@ import java.io.IOException;
 @Slf4j
 public class AuthConfig {
     private TokenExtractor tokenExtractor = new BearerTokenExtractor();
-
-    @Bean
-    RestTemplate restTemplate(){
-        return new RestTemplate();
-    }
 
     @Value("${ssoScope:pivotal}")
     private String ssoResourceId;

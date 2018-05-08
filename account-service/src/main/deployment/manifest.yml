@@ -12,6 +12,6 @@ applications:
   env:
     SPRING_PROFILES_ACTIVE: sso
     GRANT_TYPE: client_credentials
-    SSO_SCOPES: pivotal.write, pivotal.read
-    SSO_AUTHORITIES: pivotal.write, pivotal.read
+    SSO_SCOPES: pivotal.write, pivotal.read, spring.write, spring.read
+    SSO_AUTHORITIES: pivotal.write, pivotal.read, spring.write, spring.read
     SSO_ACCESS_TOKEN_LIFETIME: 30
