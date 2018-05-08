@@ -2,7 +2,11 @@ package com.example.customer.domain;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import javax.persistence.*;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
 /**
  * Created by aniruthmp on 7/4/2017.
@@ -10,7 +14,6 @@ import javax.persistence.*;
 @Data
 @NoArgsConstructor
 @Entity
-@Table(name = "customer")
 public class Customer {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

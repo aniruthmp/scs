@@ -1,13 +1,17 @@
 ---
 applications:
-- name: ani-account-service
-  memory: 512M
+- name: account-service
+  memory: 1024M
   path: ../../../build/libs/account-service-0.0.1-SNAPSHOT.jar
   host: ani-account-service
+  instances: 1
   services:
-  - mongodb
-  - config-server
-  - service-registry
-  - p-rabbitmq
+  - config
+  - registry
+  - sso
   env:
-    SPRING_PROFILES_ACTIVE: cloud
+    SPRING_PROFILES_ACTIVE: sso
+    GRANT_TYPE: client_credentials
+    SSO_SCOPES: pivotal.write, pivotal.read
+    SSO_AUTHORITIES: pivotal.write, pivotal.read
+    SSO_ACCESS_TOKEN_LIFETIME: 30

@@ -2,6 +2,7 @@ package com.example.account.api;
 
 import com.example.account.domain.Account;
 import com.example.account.repository.AccountRepository;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -10,6 +11,7 @@ import java.util.List;
 import java.util.Random;
 
 @RestController
+@RefreshScope
 public class AccountController {
 
     private AccountRepository accountRepository;

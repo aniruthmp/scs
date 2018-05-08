@@ -1,14 +1,11 @@
 ---
 applications:
-- name: ani-customer-service
+- name: customer-service
   memory: 1G
   path: ../../../build/libs/customer-service-0.0.1-SNAPSHOT.jar
-  host: ani-account-service
   services:
-  - mysql
-  - config-server
-  - service-registry
-  - p-rabbitmq
-  - circuit-breaker-dashboard
+  - config
+  - registry
   env:
-    SPRING_PROFILES_ACTIVE: cloud
+    SPRING_PROFILES_ACTIVE: sso
+

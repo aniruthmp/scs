@@ -15,7 +15,6 @@ public class CustomerController {
         this.customerService = customerService;
     }
 
-
     @GetMapping(value = "/customer")
     public CustomerResponse getByCustomerNumber(@RequestParam("customerNumber") int customerNumber){
         return this.customerService.findCustomerDetailsByNumber(customerNumber);

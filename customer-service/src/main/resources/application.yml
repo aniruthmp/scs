@@ -2,42 +2,47 @@ security:
   basic:
     enabled: false
 
-spring:
-  logging:
-    pattern:
-      console: "%clr(%d{yyyy-MM-dd HH:mm:ss}){faint} %clr(${LOG_LEVEL_PATTERN:-%5p}) %clr([${springAppName:-},%X{X-B3-TraceId:-},%X{X-B3-SpanId:-},%X{X-Span-Export:-}]){yellow} %clr(${PID:- }){magenta} %clr(---){faint} %clr([%15.15t]){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint} %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}"
-    level:
-      org.springframework: WARN
-      org.hibernate: WARN
-  jpa:
-    hibernate:
-      ddl-auto: create-drop
-    database-platform: org.hibernate.dialect.MySQLDialect
-    show-sql: false
-  datasource:
-    driverClassName: com.mysql.jdbc.Driver
-
-eureka:
-  client:
-    serviceUrl:
-      defaultZone: ${DISCOVERY_URL:http://discovery:8761}/eureka/
-  instance:
-    leaseRenewalIntervalInSeconds: 1
-    leaseExpirationDurationInSeconds: 2
-
-ribbon:
-  eureka:
-    enabled: true
+management:
+  security:
+    enabled: false
 
 ---
 
 spring:
   profiles: local
-  jpa:
-    hibernate:
-      ddl-auto: create-drop
-  datasource:
-    driverClassName: com.mysql.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/root
-    username: root
-    password: password
+  cloud:
+    config:
+      enabled: false
+eureka:
+  client:
+    enabled: false
+server:
+  port: 8001
+
+AUTH_SERVER: https://pivot-aparthasarathy.login.run.pcfbeta.io/
+
+security:
+  basic:
+    enabled: false
+  require_ssl: false
+  oauth2:
+#    client:
+#      client-id: f17dfc29-7c0f-4e50-af2c-06a21b670fd0
+#      client-secret: 7c7aafa6-18ff-4d37-9e20-3a7dd34d975a
+    resource:
+      preferTokenInfo: false
+      userInfoUri: ${AUTH_SERVER}/userinfo
+      tokenInfoUri: ${AUTH_SERVER}/check_token
+      jwk:
+        key-set-uri: ${AUTH_SERVER}/token_keys
+
+---
+
+spring:
+  profiles: sso
+  cloud:
+    config:
+      enabled: true
+eureka:
+  client:
+    enabled: false
