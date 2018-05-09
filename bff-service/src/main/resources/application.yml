@@ -1,0 +1,61 @@
+security:
+  basic:
+    enabled: false
+
+management:
+  security:
+    enabled: false
+
+---
+
+spring:
+  profiles: local
+  cloud:
+    config:
+      enabled: false
+eureka:
+  client:
+    enabled: false
+server:
+  port: 6001
+
+AUTH_SERVER: https://pivot-aparthasarathy.login.run.pcfbeta.io/
+
+security:
+  basic:
+    enabled: false
+  require_ssl: false
+  oauth2:
+    client:
+      client-id: f17dfc29-7c0f-4e50-af2c-06a21b670fd0
+      client-secret: 7c7aafa6-18ff-4d37-9e20-3a7dd34d975a
+      grant-type: client_credentials
+      access-token-uri: ${AUTH_SERVER}/oauth/token
+      user-authorization-uri: ${AUTH_SERVER}/oauth/authorize
+
+hystrix:
+  command.default.execution:
+    isolation.strategy: SEMAPHORE
+    timeout.enabled: false
+    isolation.thread.timeoutInMilliseconds: 8000
+  metrics:
+    enabled: false
+
+---
+
+spring:
+  profiles: sso
+  cloud:
+    config:
+      enabled: true
+
+security:
+  oauth2:
+    client:
+      client-id: f17dfc29-7c0f-4e50-af2c-06a21b670fd0
+      client-secret: 7c7aafa6-18ff-4d37-9e20-3a7dd34d975a
+
+hystrix.command.default.execution:
+  isolation.strategy: SEMAPHORE
+  timeout.enabled: false
+  isolation.thread.timeoutInMilliseconds: 8000
