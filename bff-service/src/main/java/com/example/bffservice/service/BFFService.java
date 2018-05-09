@@ -35,7 +35,11 @@ public class BFFService {
     @Value("${ACCOUNT_SERVICE_URL}")
     private String URL_ACCOUNT_SERVICE;
 
-
+    /**
+     * BackEnd For Front-End method to aggregate data from 2 micro-services
+     * @param customerNumber
+     * @return
+     */
     public UIResponse findCustomerDetailsByNumber(int customerNumber) {
         log.info("Came inside findCustomerDetailsByNumber for customerId: " + customerNumber);
         StopWatch stopWatch = new StopWatch();
