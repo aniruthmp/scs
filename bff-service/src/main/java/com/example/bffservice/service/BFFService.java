@@ -6,6 +6,7 @@ import com.example.bffservice.model.Customer;
 import com.example.bffservice.model.UIResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -28,9 +29,11 @@ public class BFFService {
     @Autowired
     private TokenService tokenService;
 
-    private String URL_CUSTOMER_SERVICE = "https://ani-customer-service.pcfbeta.io/customers/search/" +
-            "findByCustomerNumber?customerNumber=";
-    private String URL_ACCOUNT_SERVICE = "https://ani-account-service.pcfbeta.io//accounts/customer?customerNumber=";
+    @Value("${CUSTOMER_SERVICE_URL}")
+    private String URL_CUSTOMER_SERVICE;
+
+    @Value("${ACCOUNT_SERVICE_URL}")
+    private String URL_ACCOUNT_SERVICE;
 
 
     public UIResponse findCustomerDetailsByNumber(int customerNumber) {
@@ -60,6 +63,7 @@ public class BFFService {
                     customer.getStreetAddress(), customer.getCity(), customer.getState(), customer.getZip()));
 
             //Now make Account service call
+            stopWatch = new StopWatch();
             stopWatch.start();
             uri = URL_ACCOUNT_SERVICE + customerNumber;
             log.info("Calling URI: " + uri);

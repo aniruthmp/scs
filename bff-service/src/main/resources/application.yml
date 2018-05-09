@@ -20,6 +20,8 @@ server:
   port: 6001
 
 AUTH_SERVER: https://pivot-aparthasarathy.login.run.pcfbeta.io/
+CUSTOMER_SERVICE_URL: "https://ani-customer-service.pcfbeta.io/customers/search/findByCustomerNumber?customerNumber="
+ACCOUNT_SERVICE_URL: "https://ani-account-service.pcfbeta.io//accounts/customer?customerNumber="
 
 security:
   basic:
@@ -40,22 +42,3 @@ hystrix:
     isolation.thread.timeoutInMilliseconds: 8000
   metrics:
     enabled: false
-
----
-
-spring:
-  profiles: sso
-  cloud:
-    config:
-      enabled: true
-
-security:
-  oauth2:
-    client:
-      client-id: f17dfc29-7c0f-4e50-af2c-06a21b670fd0
-      client-secret: 7c7aafa6-18ff-4d37-9e20-3a7dd34d975a
-
-hystrix.command.default.execution:
-  isolation.strategy: SEMAPHORE
-  timeout.enabled: false
-  isolation.thread.timeoutInMilliseconds: 8000

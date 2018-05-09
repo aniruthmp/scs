@@ -31,6 +31,7 @@ ext {
 dependencies {
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-actuator'
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-web'
+    compile group: 'org.springframework.boot', name: 'spring-boot-configuration-processor'
     compile group: 'io.pivotal.spring.cloud', name: 'spring-cloud-services-starter-circuit-breaker'
     compile 'io.pivotal.spring.cloud:spring-cloud-services-starter-config-client'
     compile group: 'io.pivotal.spring.cloud', name: 'spring-cloud-services-starter-service-registry'
