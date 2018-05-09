@@ -15,9 +15,7 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.E
 import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configurers.ResourceServerSecurityConfigurer;
-import org.springframework.security.oauth2.provider.authentication.BearerTokenExtractor;
 import org.springframework.security.oauth2.provider.authentication.OAuth2AuthenticationDetails;
-import org.springframework.security.oauth2.provider.authentication.TokenExtractor;
 import org.springframework.security.oauth2.provider.expression.OAuth2MethodSecurityExpressionHandler;
 import org.springframework.security.web.authentication.preauth.AbstractPreAuthenticatedProcessingFilter;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -33,8 +31,6 @@ import java.io.IOException;
 @EnableResourceServer
 @Slf4j
 public class AuthConfig {
-    private TokenExtractor tokenExtractor = new BearerTokenExtractor();
-
     @Value("${ssoScope:pivotal}")
     private String ssoResourceId;
 
@@ -77,11 +73,6 @@ public class AuthConfig {
                     protected void doFilterInternal(HttpServletRequest request,
                                                     HttpServletResponse response, FilterChain filterChain)
                             throws ServletException, IOException {
-                        // We don't want to allow access to a resource with no token so clear
-                        // the security context in case it is actually an OAuth2Authentication
-                        if (tokenExtractor.extract(request) == null) {
-                            SecurityContextHolder.clearContext();
-                        }
                         filterChain.doFilter(request, response);
                     }
                 }, AbstractPreAuthenticatedProcessingFilter.class);

@@ -45,3 +45,5 @@ security:
       tokenInfoUri: ${AUTH_SERVER}/check_token
       jwk:
         key-set-uri: ${AUTH_SERVER}/token_keys
+
+hystrix.command.default.execution.isolation.strategy: SEMAPHORE

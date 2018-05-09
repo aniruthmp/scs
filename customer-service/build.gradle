@@ -41,7 +41,7 @@ dependencies {
     compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-sleuth'
     compile group: 'org.springframework.data', name: 'spring-data-rest-hal-browser'
     compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-feign'
-    compile 'org.springframework.cloud:spring-cloud-starter-oauth2:1.2.2.RELEASE'
+    compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-oauth2', version: '1.2.2.RELEASE'
     compile group: 'org.projectlombok', name: 'lombok', version: '1.16.18'
     testCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test'
 
