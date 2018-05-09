@@ -1,0 +1,12 @@
+---
+applications:
+- name: bff-service
+  memory: 1G
+  host: ani-bff-service
+  path: ../../../build/libs/bff-service-0.0.1-SNAPSHOT.jar
+  services:
+  - config
+  - registry
+  - circuit-breaker-dashboard
+  env:
+    SPRING_PROFILES_ACTIVE: sso
