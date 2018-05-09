@@ -11,7 +11,7 @@
 - **Authorization Server:** The Single Sign-On server that issues access tokens to client applications after successfully authenticating the resource owner.
 - **Resource Server:** The server that hosts protected resources and accepts and responds to protected resource requests using access tokens. Applications access the server through APIs.
 
-## Pre-requisite
+## [Pre-requisite](#pre-requisite)
 1. First, create the _**Single Sing-On**_ service from the Marketplace ![SCREENSHOT](./docs/marketplace.png). Go with the default options and create the service
 1. From the `cf cli` you can grab the URL for this newly created service as follows ![SCREENSHOT](./docs/sso-service.png)
 1. When you come in for the first time to the above URL, there will be no _Apps_ or _Resources_
@@ -91,7 +91,7 @@
         }
     ```
 1. With this our app should be secured. If we invoke an API without valid token, you should see _**401 Unauthorized**_ response from the app.
-1. First let's generate the token. Ensure [jq](https://stedolan.github.io/jq/) is installed.
+1. First let's [Generate Token](#generate-the-token) Ensure [jq](https://stedolan.github.io/jq/) is installed.
 
     ```bash
     curl -s -X POST https://pivot-aparthasarathy.login.run.pcfbeta.io/oauth/token -H "Content-Type: application/x-www-form-urlencoded" -d "client_id=f17dfc29-7c0f-4e50-af2c-06a21b670fd0&client_secret=7c7aafa6-18ff-4d37-9e20-3a7dd34d975a&grant_type=client_credentials" | jq -r .access_token
@@ -130,7 +130,7 @@
         SSO_ACCESS_TOKEN_LIFETIME: 30
     ```
 1. In our _java_ code below, we make use of _EnableResourceServer_. Please refer `customer-service` java code above for this.
-1. Once we generate the token (refer to `customer-service` section above), we could invoke any REST API and validate the same. ![SCREENSHOT](./docs/postman-accounts.png)
+1. Once we generate the token (refer to `customer-service` section [above]((#generate-the-token))), we could invoke any REST API and validate the same. ![SCREENSHOT](./docs/postman-accounts.png)
 
 ## Scenario 3: 3rd Party micro-service to call above secured micro-services
 Let's say we have another micro-service [bff-service](https://samnewman.io/patterns/architectural/bff/) which calls both `account-service` and `customer-service`. To make it even more interesting, we could have 2 cases
@@ -138,7 +138,7 @@ Let's say we have another micro-service [bff-service](https://samnewman.io/patte
 - _**Case 2:** `bff-service` is secured by some other type of security (for e.g. [ACL](https://en.wikipedia.org/wiki/Access_control_list#Networking_ACLs) based security)_
 
 In both the above cases, we need to generate a token through the application, embed that in the HttpHeader before making a RESTTemplate call. In this example, I have used [Ribbon](https://cloud.spring.io/spring-cloud-netflix/multi/multi_spring-cloud-ribbon.html) with Eureka to invoke the call to ther microservices registered with Eureke
-1. First generate _accessToken_ inside the code. This requires a valid _**client_id**_ and  _**client_secret**_. This is where we would use the values configured in the _Pre-requisite_ section above.
+1. First generate _accessToken_ inside the code. This requires a valid _**client_id**_ and  _**client_secret**_. This is where we would use the values configured in the [Pre-requisite](#pre-requisite) section above.
 
     ```java
     @Service
