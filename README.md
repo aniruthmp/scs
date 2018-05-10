@@ -207,43 +207,81 @@ In both the above cases, we need to generate a token through the application, em
             stopWatch.start();
 
             UIResponse uiResponse = null;
-
-            log.info("Querying the customer microservice...");
             HttpHeaders httpHeaders = tokenService.getHeadersWithAccessToken();
             HttpEntity<String> entity = new HttpEntity<String>("parameters", httpHeaders);
 
-            String uri = URL_CUSTOMER_SERVICE + customerNumber;
-            log.info("Calling URI: " + uri);
+            log.info("Querying the customer microservice...");
             ResponseEntity<Customer> customerResponseEntity = restTemplate.exchange(
-                    uri, HttpMethod.GET, entity, Customer.class);
+                    URL_CUSTOMER_SERVICE, HttpMethod.GET, entity, Customer.class, customerNumber);
             stopWatch.stop();
+            log.info("customer micro-service took " + stopWatch.getTotalTimeMillis() + " milliseconds");
 
             if (Objects.nonNull(customerResponseEntity)) {
                 Customer customer = customerResponseEntity.getBody();
-                log.info("customer micro-service took " + stopWatch.getTotalTimeMillis() + " milliseconds");
-                log.info("customer micro-service returned " + customer.toString());
 
                 uiResponse = new UIResponse(customer.getFirstName(), customer.getLastName(), customer.getAccountNumber());
                 uiResponse.setContact(new Contact(customer.getCellPhone(), customer.getLandLine(),
                         customer.getStreetAddress(), customer.getCity(), customer.getState(), customer.getZip()));
 
                 //Now make Account service call
+                log.info("Querying the account microservice...");
                 stopWatch = new StopWatch();
                 stopWatch.start();
-                uri = URL_ACCOUNT_SERVICE + customerNumber;
-                log.info("Calling URI: " + uri);
                 ResponseEntity<List<Account>> accountResponseEntity = restTemplate.exchange(
-                        uri, HttpMethod.GET, entity, new ParameterizedTypeReference<List<Account>>() {});
+                        URL_ACCOUNT_SERVICE, HttpMethod.GET, entity, new ParameterizedTypeReference<List<Account>>() {
+                        }, customerNumber);
                 stopWatch.stop();
                 log.info("account micro-service took " + stopWatch.getTotalTimeMillis() + " milliseconds");
 
                 if (Objects.nonNull(accountResponseEntity)) {
                     List<Account> accounts = accountResponseEntity.getBody();
-                    log.info("account micro-service returned " + accounts.toString());
                     uiResponse.setAccounts(accounts);
                 }
             }
 
             return uiResponse;
         }
+    ```
+1. Of-course the above client could also be done in a simpler way using _**OAuth2RestTemplate**_. Create the required bean
+
+    ```java
+    @Bean
+    public DefaultOAuth2ClientContext oauth2ClientContext() {
+        return new DefaultOAuth2ClientContext(new DefaultAccessTokenRequest());
+    }
+
+    @Autowired
+    OAuth2ClientConfig auth2ClientConfig;
+
+    @Bean
+    public ClientCredentialsResourceDetails client() {
+        ClientCredentialsResourceDetails resourceDetails = new ClientCredentialsResourceDetails();
+        resourceDetails.setClientId(auth2ClientConfig.getClientId());
+        resourceDetails.setClientSecret(auth2ClientConfig.getClientSecret());
+        resourceDetails.setAccessTokenUri(auth2ClientConfig.getAccessTokenUri());
+        resourceDetails.setGrantType(auth2ClientConfig.getGrantType());
+        return resourceDetails;
+    }
+
+    @Bean
+    public OAuth2RestTemplate oAuth2RestTemplate() {
+        return new OAuth2RestTemplate(client(), oauth2ClientContext());
+    }
+    ```
+1. Use the above _**OAuth2RestTemplate**_ in the service class. In this way, the template will automatically generate the accessToken _(if not already present)_
+
+    ```java
+    @Autowired
+    private OAuth2RestTemplate oAuth2RestTemplate;
+
+    public UIResponse findCustomerDetailsByNumberUsingOAuth(int customerNumber) {
+        ...
+        ResponseEntity<Customer> customerResponseEntity = oAuth2RestTemplate.getForEntity(
+                URL_CUSTOMER_SERVICE, Customer.class, customerNumber);
+        ...
+        ResponseEntity<List<Account>> accountResponseEntity = oAuth2RestTemplate.exchange(
+                URL_ACCOUNT_SERVICE, HttpMethod.GET, null,
+                new ParameterizedTypeReference<List<Account>>() {}, customerNumber);
+        ...
+    }
     ```

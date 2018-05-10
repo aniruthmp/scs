@@ -87,7 +87,7 @@ public class BFFService {
     }
 
     /**
-     * BackEnd For Front-End method to aggregate data from 2 micro-services
+     * BackEnd For Front-End method to aggregate data from 2 micro-services using OAuth2RestTemplate
      *
      * @param customerNumber
      * @return

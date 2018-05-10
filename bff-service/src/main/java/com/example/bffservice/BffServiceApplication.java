@@ -21,7 +21,6 @@ import org.springframework.web.client.RestTemplate;
 @EnableCircuitBreaker
 @EnableDiscoveryClient
 @EnableOAuth2Client
-@Slf4j
 public class BffServiceApplication extends WebSecurityConfigurerAdapter {
 
     public static void main(String[] args) {
@@ -59,7 +58,6 @@ public class BffServiceApplication extends WebSecurityConfigurerAdapter {
 
     @Bean
     public OAuth2RestTemplate oAuth2RestTemplate() {
-        log.info(" ### Came inside OAuth2RestTemplate ### ");
         return new OAuth2RestTemplate(client(), oauth2ClientContext());
     }
 }
