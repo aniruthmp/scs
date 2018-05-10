@@ -19,4 +19,9 @@ public class BFFController {
     public UIResponse getByCustomerNumber(@RequestParam("customerNumber") int customerNumber){
         return bffService.findCustomerDetailsByNumber(customerNumber);
     }
+
+    @GetMapping(value = "/oauth/customer")
+    public UIResponse getByCustomerNumberUsingOAuth(@RequestParam("customerNumber") int customerNumber){
+        return bffService.findCustomerDetailsByNumberUsingOAuth(customerNumber);
+    }
 }

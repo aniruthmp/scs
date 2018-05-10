@@ -12,6 +12,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.oauth2.client.OAuth2RestTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StopWatch;
 import org.springframework.web.client.RestTemplate;
@@ -27,6 +28,9 @@ public class BFFService {
     private RestTemplate restTemplate;
 
     @Autowired
+    private OAuth2RestTemplate oAuth2RestTemplate;
+
+    @Autowired
     private TokenService tokenService;
 
     @Value("${CUSTOMER_SERVICE_URL}")
@@ -37,6 +41,7 @@ public class BFFService {
 
     /**
      * BackEnd For Front-End method to aggregate data from 2 micro-services
+     *
      * @param customerNumber
      * @return
      */
@@ -46,39 +51,78 @@ public class BFFService {
         stopWatch.start();
 
         UIResponse uiResponse = null;
-
-        log.info("Querying the customer microservice...");
         HttpHeaders httpHeaders = tokenService.getHeadersWithAccessToken();
         HttpEntity<String> entity = new HttpEntity<String>("parameters", httpHeaders);
 
-        String uri = URL_CUSTOMER_SERVICE + customerNumber;
-        log.info("Calling URI: " + uri);
+        log.info("Querying the customer microservice...");
         ResponseEntity<Customer> customerResponseEntity = restTemplate.exchange(
-                uri, HttpMethod.GET, entity, Customer.class);
+                URL_CUSTOMER_SERVICE, HttpMethod.GET, entity, Customer.class, customerNumber);
         stopWatch.stop();
+        log.info("customer micro-service took " + stopWatch.getTotalTimeMillis() + " milliseconds");
 
         if (Objects.nonNull(customerResponseEntity)) {
             Customer customer = customerResponseEntity.getBody();
-            log.info("customer micro-service took " + stopWatch.getTotalTimeMillis() + " milliseconds");
-            log.info("customer micro-service returned " + customer.toString());
 
             uiResponse = new UIResponse(customer.getFirstName(), customer.getLastName(), customer.getAccountNumber());
             uiResponse.setContact(new Contact(customer.getCellPhone(), customer.getLandLine(),
                     customer.getStreetAddress(), customer.getCity(), customer.getState(), customer.getZip()));
 
             //Now make Account service call
+            log.info("Querying the account microservice...");
             stopWatch = new StopWatch();
             stopWatch.start();
-            uri = URL_ACCOUNT_SERVICE + customerNumber;
-            log.info("Calling URI: " + uri);
             ResponseEntity<List<Account>> accountResponseEntity = restTemplate.exchange(
-                    uri, HttpMethod.GET, entity, new ParameterizedTypeReference<List<Account>>() {});
+                    URL_ACCOUNT_SERVICE, HttpMethod.GET, entity, new ParameterizedTypeReference<List<Account>>() {
+                    }, customerNumber);
             stopWatch.stop();
             log.info("account micro-service took " + stopWatch.getTotalTimeMillis() + " milliseconds");
 
             if (Objects.nonNull(accountResponseEntity)) {
                 List<Account> accounts = accountResponseEntity.getBody();
-                log.info("account micro-service returned " + accounts.toString());
+                uiResponse.setAccounts(accounts);
+            }
+        }
+
+        return uiResponse;
+    }
+
+    /**
+     * BackEnd For Front-End method to aggregate data from 2 micro-services
+     *
+     * @param customerNumber
+     * @return
+     */
+    public UIResponse findCustomerDetailsByNumberUsingOAuth(int customerNumber) {
+        log.info("Came inside findCustomerDetailsByNumberUsingOAuth for customerId: " + customerNumber);
+        UIResponse uiResponse = null;
+
+        StopWatch stopWatch = new StopWatch();
+        stopWatch.start();
+        log.info("Querying the customer microservice...");
+        ResponseEntity<Customer> customerResponseEntity = oAuth2RestTemplate.getForEntity(
+                URL_CUSTOMER_SERVICE, Customer.class, customerNumber);
+        stopWatch.stop();
+        log.info("customer micro-service took " + stopWatch.getTotalTimeMillis() + " milliseconds");
+
+        if (Objects.nonNull(customerResponseEntity)) {
+            Customer customer = customerResponseEntity.getBody();
+
+            uiResponse = new UIResponse(customer.getFirstName(), customer.getLastName(), customer.getAccountNumber());
+            uiResponse.setContact(new Contact(customer.getCellPhone(), customer.getLandLine(),
+                    customer.getStreetAddress(), customer.getCity(), customer.getState(), customer.getZip()));
+
+            //Now make Account service call
+            log.info("Querying the account microservice...");
+            stopWatch = new StopWatch();
+            stopWatch.start();
+            ResponseEntity<List<Account>> accountResponseEntity = oAuth2RestTemplate.exchange(
+                    URL_ACCOUNT_SERVICE, HttpMethod.GET, null,
+                    new ParameterizedTypeReference<List<Account>>() {}, customerNumber);
+            stopWatch.stop();
+            log.info("account micro-service took " + stopWatch.getTotalTimeMillis() + " milliseconds");
+
+            if (Objects.nonNull(accountResponseEntity)) {
+                List<Account> accounts = accountResponseEntity.getBody();
                 uiResponse.setAccounts(accounts);
             }
         }

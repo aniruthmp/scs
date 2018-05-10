@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class TokenInfo {
+    public class TokenInfo {
     private String access_token;
     private String token_type;
     private String scope;

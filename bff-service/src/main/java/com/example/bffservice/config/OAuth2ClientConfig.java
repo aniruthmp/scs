@@ -7,7 +7,6 @@ import org.springframework.context.annotation.Profile;
 
 @Configuration
 @ConfigurationProperties(prefix = "security.oauth2.client")
-@Profile({"local", "sso"})
 @Data
 public class OAuth2ClientConfig {
 

@@ -36,6 +36,8 @@ dependencies {
     compile 'io.pivotal.spring.cloud:spring-cloud-services-starter-config-client'
     compile group: 'io.pivotal.spring.cloud', name: 'spring-cloud-services-starter-service-registry'
     compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-sleuth'
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-security'
+    compile group: 'org.springframework.security.oauth', name: 'spring-security-oauth2'
     compileOnly group: 'org.projectlombok', name: 'lombok'
     testCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test'
 }
